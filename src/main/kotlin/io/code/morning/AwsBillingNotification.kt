@@ -9,7 +9,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler
 
 class AwsBillingNotification: RequestHandler<Int, String> {
 
-    override fun handleRequest(input: Int, context: Context): String {
+    override fun handleRequest(input: Int, context: Context?): String {
         val lambdaLogger = context.getLogger()
         lambdaLogger.log("Kotlinモジュールですよ！！！\n")
         lambdaLogger.log("count = " + input +"\n")
