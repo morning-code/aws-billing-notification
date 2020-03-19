@@ -10,20 +10,17 @@ orbs:
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: circleci/openjdk:8-jdk
 
     working_directory: ~/repo
 
     environment:
-      # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
       TERM: dumb
 
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "build.gradle.kts" }}
@@ -32,18 +29,12 @@ jobs:
 
       - run: gradle dependencies
 
-      - run: mkdir bucket && echo "lorem ipsum" > bucket/build_asset.txt
-
       - aws-s3/sync:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          from: bucket
+          from: build/libs/aws-billing-notification-0.0.1-SNAPSHOT.jar
           overwrite: true
-          to: 's3://morning-code-aws-billing-notification/prefix'
-
-      - aws-s3/copy:
-          from: bucket/build_asset.txt
           to: 's3://morning-code-aws-billing-notification'
 
       - save_cache:
@@ -51,6 +42,5 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle.kts" }}
 
-      # run tests!
       - run: gradle test jacocoTestReport && /bin/bash .circleci/sonarqube.sh
 
