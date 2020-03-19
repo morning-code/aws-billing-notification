@@ -5,7 +5,7 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@6.7.1
+  aws-s3: circleci/aws-s3@1.0.15
 
 jobs:
   build:
@@ -32,6 +32,21 @@ jobs:
 
       - run: gradle dependencies
 
+      - run: mkdir bucket && echo "lorem ipsum" > bucket/build_asset.txt
+
+      - aws-s3/sync:
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          from: bucket
+          overwrite: true
+          to: 's3://aws-billing-notification/prefix'
+
+      - aws-s3/copy:
+          arguments: '--dry-run'
+          from: bucket/build_asset.txt
+          to: 's3://aws-billing-notification'
+
       - save_cache:
           paths:
             - ~/.gradle
@@ -40,14 +55,3 @@ jobs:
       # run tests!
       - run: gradle test jacocoTestReport && /bin/bash .circleci/sonarqube.sh
 
-workflows:
-  build_and_push_image:
-    jobs:
-      - aws-ecr/build-and-push-image:
-          account-url: AWS_ACCOUNT_URL
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: true
-          repo: aws-billing-notification
-          region: AWS_DEFAULT_REGION
-          tag: "latest"
