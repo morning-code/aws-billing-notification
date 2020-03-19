@@ -62,7 +62,6 @@ sonarqube {
   properties {
     property("sonar.sourceEncoding", "UTF-8")
     property("sonar.projectKey", "api")
-    property("sonar.sources", ".")
     property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
   }
 }
