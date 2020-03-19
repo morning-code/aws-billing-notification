@@ -4,16 +4,17 @@
 package io.code.morning
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.lambda.runtime.RequestHandler
 
 
-class AwsBillingNotification {
+class AwsBillingNotification: RequestHandler<Int, String> {
 
-    fun handler(count: Int, context: Context): String {
+    override fun handleRequest(input: Int, context: Context): String {
         val lambdaLogger = context.getLogger()
         lambdaLogger.log("Kotlinモジュールですよ！！！\n")
-        lambdaLogger.log("count = " + count +"\n")
+        lambdaLogger.log("count = " + input +"\n")
         lambdaLogger.log("インプットの3倍の値が出てきますよ！、テストパラメタは全て第一引数に入ってくるようです。\n")
-        return "${count * 3}"
+        return "${input * 3}"
     }
 
     fun call(): String {
