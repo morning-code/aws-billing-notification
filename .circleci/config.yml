@@ -31,12 +31,8 @@ jobs:
       - run: gradle test jacocoTestReport && /bin/bash .circleci/sonarqube.sh
       - run: gradle build
 
-      - aws-s3/sync:
-          arguments: |
-            --acl public-read \
-            --cache-control "max-age=86400"
+      - aws-s3/copy:
           from: build/libs/aws-billing-notification-0.0.1-SNAPSHOT.jar
-          overwrite: true
           to: 's3://morning-code-aws-billing-notification'
 
       - save_cache:
