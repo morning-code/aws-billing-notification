@@ -28,6 +28,8 @@ jobs:
             - v1-dependencies-
 
       - run: gradle dependencies
+      - run: gradle test jacocoTestReport && /bin/bash .circleci/sonarqube.sh
+      - run: gradle build
 
       - aws-s3/sync:
           arguments: |
@@ -42,5 +44,4 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle.kts" }}
 
-      - run: gradle test jacocoTestReport && /bin/bash .circleci/sonarqube.sh
 
