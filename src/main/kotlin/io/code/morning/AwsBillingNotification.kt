@@ -15,5 +15,9 @@ class AwsBillingNotification {
         lambdaLogger.log("インプットの3倍の値が出てきますよ！、テストパラメタは全て第一引数に入ってくるようです。\n")
         return "${count * 3}"
     }
+
+    fun call(): String {
+        return "hello"
+    }
 }
 
