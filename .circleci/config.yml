@@ -40,12 +40,12 @@ jobs:
             --cache-control "max-age=86400"
           from: bucket
           overwrite: true
-          to: 's3://aws-billing-notification/prefix'
+          to: 's3://morning-code-aws-billing-notification/prefix'
 
       - aws-s3/copy:
           arguments: '--dry-run'
           from: bucket/build_asset.txt
-          to: 's3://aws-billing-notification'
+          to: 's3://morning-code-aws-billing-notification'
 
       - save_cache:
           paths:
