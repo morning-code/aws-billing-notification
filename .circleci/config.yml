@@ -43,7 +43,6 @@ jobs:
           to: 's3://morning-code-aws-billing-notification/prefix'
 
       - aws-s3/copy:
-          arguments: '--dry-run'
           from: bucket/build_asset.txt
           to: 's3://morning-code-aws-billing-notification'
 
